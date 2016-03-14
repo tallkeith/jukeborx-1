@@ -4,3 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem "sinatra"
+
+group :development do
+  gem "pry"
+end
