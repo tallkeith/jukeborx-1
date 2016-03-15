@@ -1,38 +1,15 @@
-require "sinatra"
+require "sinatra/base"
 require "pry"
 
 require "jukeborx/version"
 
 module Jukeborx
-  # Your code goes here...
-end
+  class Api < Sinatra::Application
 
-class Student
-end
+    get "/test" do
+      "The API is up!"
+    end
 
-get '/hi' do
-  Student.new.to_s
-end
-
-
-get "/add-one" do
-  @count ||= 0
-  @count += 1
-  "\n\n The count is #{@count}! \n\n"
-end
-
-get "/repos/:org/:repo/issues" do
-  # binding.pry
-  "that's a lotta issues"
-end
-
-get "/hello/:name" do
-  # binding.pry
-  pretty_name = params["name"].capitalize
-  "Hello there, #{pretty_name}!"
-end
-
-post '/hi' do
-  binding.pry
-  "I created a thing"
+    run! if app_file == $0
+  end
 end
