@@ -1,38 +1,33 @@
-require "sinatra"
+require "sinatra/base"
 require "pry"
 
 require "jukeborx/version"
 
+MUSIC_DIR = "/Users/brit/Music/downloads"
+
 module Jukeborx
-  # Your code goes here...
-end
+  class Api < Sinatra::Application
+    set :library, Library.new(MUSIC_DIR)
 
-class Student
-end
+    get "/test" do
+      "The API is up!"
+    end
 
-get '/hi' do
-  Student.new.to_s
-end
+    ## Params:
+    ##  type (required) - One of 'artist', 'album', 'title'
+    ##  value - "radiohead", "supermodified", "bad blood"
+    get "/api/search" do
+      if params["type"] == "artist"
+        settings.library.match_artists(params["value"])
+      elsif params["type"] == "album"
+        settings.library.match_albums(params["value"])
+      elsif params["type"] == "title"
+        settings.library.match_titles(params["value"])
+      else
+        { error: "Invalid search type." }.to_json
+      end
+    end
 
-
-get "/add-one" do
-  @count ||= 0
-  @count += 1
-  "\n\n The count is #{@count}! \n\n"
-end
-
-get "/repos/:org/:repo/issues" do
-  # binding.pry
-  "that's a lotta issues"
-end
-
-get "/hello/:name" do
-  # binding.pry
-  pretty_name = params["name"].capitalize
-  "Hello there, #{pretty_name}!"
-end
-
-post '/hi' do
-  binding.pry
-  "I created a thing"
+    run! if app_file == $0
+  end
 end
