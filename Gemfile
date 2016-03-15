@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem "sinatra"
+gem "mp3info"
 
 group :development do
   gem "pry"
