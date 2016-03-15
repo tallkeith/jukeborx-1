@@ -1,10 +1,12 @@
 require "sinatra"
+require "mp3info"
 require "pry"
 
 require "jukeborx/version"
+require "jukeborx/song"
+require "jukeborx/library"
 
 module Jukeborx
-  # Your code goes here...
 end
 
 class Student
