@@ -1,7 +1,10 @@
 require "sinatra/base"
+require "mp3info"
 require "pry"
 
 require "jukeborx/version"
+require "jukeborx/song"
+require "jukeborx/library"
 
 MUSIC_DIR = "/Users/brit/Music/downloads"
 
