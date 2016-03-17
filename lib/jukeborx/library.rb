@@ -1,6 +1,7 @@
 module Jukeborx
   class Library
     include Enumerable
+    attr_reader :songs
 
     def initialize(dir)
       @songs = []
@@ -9,6 +10,10 @@ module Jukeborx
 
     def each
       @songs.each { |x| yield(x) }
+    end
+
+    def get_song(id)
+      @songs.find { |x| x.id == id }
     end
 
     def match_artists(name)
