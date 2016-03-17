@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Brit's awesome music player</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Welcome to Jukeborx!</h1>
+        <h3>Library</h3>
+        <ul class="songs">
+            <% library.each do |song| %>
+                <li class="song"><%= song.artist %> - <%= song.title %></li>
+            <% end %>
+            <!-- <li class="song">Radiohead - Subterannean -->
+            <!-- </li> -->
+        </ul>
+    </body>
+</html>

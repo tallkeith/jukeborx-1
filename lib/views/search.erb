@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Brit's awesome search results</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <a href="/">Homepage</a>
+        <h2><%= type.capitalize %> search results for '<%= q %>' ... </h2>
+        <h3><%= results.count %> results</h3>
+        <ul class="search-results">
+          <% results.each do |result| %>
+              <li class="search-result">
+                  <%= result.artist %> - <%= result.title %>
+                  <form class="play-button" action="/play" method="post">
+                      <input type="hidden" value="<%= result.id %>" name="id">
+                      <input type="submit" value="Play!">
+                  </form>
+              </li>
+          <% end %>
+        </ul>
+    </body>
+</html>
