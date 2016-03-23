@@ -7,41 +7,39 @@ require "pry"
 
 require "jukeborx/version"
 require "jukeborx/song"
-require "jukeborx/library"
 
 db_config = YAML.load(File.open("config/database.yml"))
 ActiveRecord::Base.establish_connection(db_config)
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 
-# binding.pry
-
 MUSIC_DIR = "/Users/brit/Music/downloads"
-LIBRARY = Jukeborx::Library.new(MUSIC_DIR)
 
 module Jukeborx
   class Api < Sinatra::Application
 
     get "/api/artists" do
       content_type :json
-      LIBRARY.list_artists.to_json
+      artists = Song.select(:artist).distinct.map {|x| x.artist }.compact
+      artists.to_json
     end
 
     get "/api/albums" do
       content_type :json
-      LIBRARY.list_albums.to_json
+      albums = Song.select(:albums).distinct.map { |x| x.album }.compact
+      albums.to_json
     end
 
     get "/api/artists/:search" do
       search = params["search"]
       content_type :json
-      results = LIBRARY.match_artists(search)
+      results = Song.where("artist LIKE '%#{search}%'")
       # status 404 if results.size.zero?
       results.to_json
     end
 
     post "/api/play/:id" do
       id = params["id"].to_i
-      song = LIBRARY.get_song(id)
+      song = Song.find(id)
       content_type :json
       if song
         song.play
@@ -61,7 +59,7 @@ module Jukeborx
     ### Web/HTML routes below
 
     get "/" do
-      erb :index, locals: { library: LIBRARY.songs }
+      erb :index, locals: { library: Song.all }
     end
 
     ## localhost:4567/search?cat=artists&q=mingus
@@ -69,11 +67,11 @@ module Jukeborx
       query = params["q"]
       search_type = params["cat"]
       if query && search_type == "artists"
-        results = LIBRARY.match_artists(query)
+        results = Song.where("artist LIKE '%#{query}%'")
       elsif query && search_type == "albums"
-        results = LIBRARY.match_albums(query)
+        results = Song.where("album LIKE '%#{query}%'")
       elsif query && search_type == "titles"
-        results = LIBRARY.match_titles(query)
+        results = Song.where("title LIKE '%#{query}%'")
       else
         results = []
         status 404
@@ -84,7 +82,7 @@ module Jukeborx
     post "/play" do
       song_id = params["id"]
       if song_id
-        song = LIBRARY.get_song(song_id.to_i)
+        song = Song.find(song_id)
         song.play if song
         redirect to("/")
       else
