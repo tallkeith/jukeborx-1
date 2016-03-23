@@ -14,6 +14,26 @@ ActiveRecord::Base.logger = Logger.new(STDOUT)
 
 MUSIC_DIR = "/Users/brit/Music/downloads"
 
+def import(dir)
+  files = Dir.glob(File.join(dir, '*/*.mp3'))
+  files.each do |mp3_file|
+    begin
+      tag = Mp3Info.open(mp3_file) { |mp3| mp3.tag }
+      Jukeborx::Song.create(artist: tag.artist,
+                            album: tag.album,
+                            title: tag.title,
+                            year: tag.year,
+                            filename: mp3_file)
+    rescue Mp3InfoError => e
+      puts "#{mp3_file} failed with: #{e.message}"
+    rescue Encoding::InvalidByteSequenceError => e
+      puts "Blew up trying to read: #{mp3_file}"
+    end
+  end
+end
+
+binding.pry
+
 module Jukeborx
   class Api < Sinatra::Application
 
