@@ -1,11 +1,19 @@
 require "sinatra/base"
+require "active_record"
 require "mp3info"
+require "yaml"
 require "json"
 require "pry"
 
 require "jukeborx/version"
 require "jukeborx/song"
 require "jukeborx/library"
+
+db_config = YAML.load(File.open("config/database.yml"))
+ActiveRecord::Base.establish_connection(db_config)
+ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+# binding.pry
 
 MUSIC_DIR = "/Users/brit/Music/downloads"
 LIBRARY = Jukeborx::Library.new(MUSIC_DIR)
