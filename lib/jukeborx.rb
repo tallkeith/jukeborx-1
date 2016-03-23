@@ -57,9 +57,14 @@ module Jukeborx
       results.to_json
     end
 
-    post "/api/play/:id" do
+    post "/api/play/:id/:user_id" do
       id = params["id"].to_i
+      user_id = params["user_id"].to_i
       song = Song.find(id)
+
+    # HW question 2
+      
+
       content_type :json
       if song
         song.play
