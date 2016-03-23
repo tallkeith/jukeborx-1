@@ -15,7 +15,7 @@ ActiveRecord::Base.logger = Logger.new(STDOUT)
 MUSIC_DIR = "/Users/brit/Music/downloads"
 
 def import(dir)
-  files = Dir.glob(File.join(dir, '*/*.mp3'))
+  files = Dir.glob(File.join(dir, '*.mp3'))
   files.each do |mp3_file|
     begin
       tag = Mp3Info.open(mp3_file) { |mp3| mp3.tag }
