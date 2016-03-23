@@ -1,18 +1,7 @@
 module Jukeborx
-  class Song
-    attr_reader :id, :filename, :artist, :album, :title, :year
-
-    def initialize(id, file, tag)
-      @id = id
-      @filename = file
-      @artist = tag.artist
-      @album = tag.album
-      @title = tag.title
-      @year = tag.year
-    end
-
+  class Song < ActiveRecord::Base
     def play
-      spawn("afplay \"#{@filename}\"")
+      spawn("afplay \"#{self.filename}\"")
     end
 
     def to_json(options=nil)
